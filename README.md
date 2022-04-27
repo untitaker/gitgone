@@ -22,3 +22,9 @@ cargo run --release stdin < input.txt | pv --line-mode --rate > links.txt
 ```
 
 If the numbers seem low, try tweaking `NUM_WORKERS` in the code.
+
+## Useful commands
+
+```
+cat random_dump.csv | rg -o 'https?://git.io/[a-zA-Z0-9_-]+'
+```

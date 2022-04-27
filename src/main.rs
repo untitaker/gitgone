@@ -77,6 +77,7 @@ async fn main() {
                 let receiver = queue.clone();
                 workers.push(tokio::spawn(async move {
                     while let Some(line) = receiver.pop().await {
+                        let line: String = line;
                         let line = line.replace("http://git.io/", "https://git.io/");
 
                         download(&client, &line).await;
