@@ -20,15 +20,21 @@ async fn main() {
                     line.push(CHARSET[rng.gen_range(0..CHARSET.len())] as char);
                 }
 
-                let res: reqwest::Response = client.get(&line)
+                let res: reqwest::Response = match client.get(&line)
                     .send()
-                    .await.unwrap();
+                    .await {
+                        Ok(x) => x,
+                        Err(e) => {
+                            eprintln!("failed to send: {}", e);
+                            continue;
+                        }
+                    };
                 if res.status().as_u16() == 404 {
                     println!("{} -> 404", line);
                 } else if let Some(location) = res.headers().get("Location") {
                     println!("{} -> {}", line, location.to_str().unwrap());
                 }
-                res.bytes().await.unwrap();
+                res.bytes().await.ok();
             }
         }));
     }
